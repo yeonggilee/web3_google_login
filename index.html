@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>WEB3 - google login</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<!-- 
+	<script src="https://apis.google.com/js/platform.js" async defer></script>
+	<meta name="google-signin-client_id" content="697035566975-i3oso8iq0scc53q8gss493d3gp1qpm07.apps.googleusercontent.com">
+	<script>
+    function onSignIn(googleUser) {
+      var profile = googleUser.getBasicProfile();
+      console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+      console.log('Name: ' + profile.getName());
+      console.log('Image URL: ' + profile.getImageUrl());
+      console.log('Email: ' + profile.getEmail()); 
+    }
+  	</script> 
+  	-->
+  	<script>
+  	function checkLoginStatus(){
+      var loginBtn = document.querySelector('#loginBtn');
+      var nameTxt = document.querySelector('#name');
+      if(gauth.isSignedIn.get()){
+        console.log('logined');
+        loginBtn.value = 'Logout';
+        var profile = gauth.currentUser.get().getBasicProfile();
+        nameTxt.innerHTML = 'Welcome <strong>'+profile.getName()+'</strong> ';
+      } else {
+        console.log('logouted');
+        loginBtn.value = 'Login';
+        nameTxt.innerHTML = '';
+      }
+    }
+    function init(){
+      console.log('init');
+      gapi.load('auth2', function() {
+        console.log('auth2');
+        window.gauth = gapi.auth2.init({
+          client_id:'697035566975-i3oso8iq0scc53q8gss493d3gp1qpm07.apps.googleusercontent.com'
+        })
+        gauth.then(function(){
+          console.log('googleAuth success');
+          checkLoginStatus();
+        }, function(){
+          console.log('googleAuth fail');
+        });
+      });
+    }
+  	</script>
+</head>
+<body>
+	<!-- <div class="g-signin2" data-onsuccess="onSignIn"></div> -->
+	<input type="button" id="loginBtn" value="checking..." onclick="
+    if(this.value === 'Login'){
+      gauth.signIn().then(function(){
+        console.log('gauth.signIn()');
+        checkLoginStatus();
+      });
+    } else {
+      gauth.signOut().then(function(){
+        console.log('gauth.signOut()');
+        checkLoginStatus();
+      });
+    }
+  	"><span id="name"></span>
+  	
+	<script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
+</body>
+</html>
